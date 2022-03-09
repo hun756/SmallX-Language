@@ -18,11 +18,13 @@ let lexer =
     }
 );
 
+module.exports = lexer;
+
 // lexer.reset(`apple a9913`);
 // lexer.reset(`=> =`);
 
 async function main() {
-    const code = (await fs.readFile("langfiles/prog1.smlx")).toString();
+    const code = (await fs.readFile("langfiles/ex1.smlx")).toString();
     lexer.reset(code);
     while (true) {
         const token = lexer.next();
