@@ -19,6 +19,7 @@
   "homepage": "https://github.com/hun756/SmallX-Language#readme",
   "dependencies": {
     "moo": "^0.5.1",
+    "mz": "^2.7.0",
     "nearley": "^2.20.1"
   }
 }
