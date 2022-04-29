@@ -1,1 +1,4 @@
 name = "Mehmet"
+age = 25
+favourite_color = "orange"
+sum = add(1 multiple(2 subtract(4 3)))
