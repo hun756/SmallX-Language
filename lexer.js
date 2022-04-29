@@ -14,7 +14,7 @@ let lexer =
         identifier: /[a-zA-Z][a-zA-Z_0-9]*/,
         fatarrow: '=>',
         assign: '=',
-        NL: { match: /\n/, lineBreaks: true },
+        NL:  { match: /[\r\n]+/, lineBreaks: true }
     }
 );
 
