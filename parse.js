@@ -21,7 +21,7 @@ async function main() {
     if (parser.results.length > 1) {
         console.error('Error: Ambigious grammar dtected.');
     } else if (parser.results.length == 1) {
-        const ast = parser.results[0];
+        const ast = parser.results[0][0];
         const outputFilename = fileName.replace('.smlx', '.ast');
         await fs.writeFile(outputFilename, JSON.stringify(ast, null, "  "));
         console.log(`Wrote ouput file : ${outputFilename}`);

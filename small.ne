@@ -5,13 +5,13 @@
 @lexer myLexer
 
 statements
-    ->  statement 
+    -> _ statement _ 
     {%
         (data) => {
             return [data[0]];
         }
     %}
-    |   statements %NL statement 
+    |   statements %NL _ statement _ 
         {%
             (data) => {
                 return [...data[0], data[2]]
@@ -67,6 +67,43 @@ expr
     |   %number         {% id %}
     |   %identifier     {% id %}
     |   fun_call        {% id %}
+    |   lambda          {% id %}
+
+lambda 
+    ->   "(" (_ param_list _):? ")" _ "=>" _ lambda_body
+        {%
+            (data) => {
+                return {
+                    type: "lambda",
+                    parameters: data[2]? data[2][0] : [],
+                    body: data[7]
+                }
+            }
+        %}
+
+param_list
+    -> %identifier (__ %identifier):*
+    {%
+        (data) => {
+            const repeatedPieces = data[1];
+            const restParams = repeatedPieces.map(piece => piece[1]);
+            return [data[0], ...restParams];
+        }
+    %}
+
+lambda_body
+    ->  expr     
+        {%
+            (data) => {
+                return [data[0]];
+            }
+        %}
+    |   _ %NL "{" _ %NL statements %NL _ "}" _ %NL
+        {%
+            (data) => {
+                return data[3];
+            }
+        %}
 
 # Optional WhiteSpace
 _ -> %WS:*

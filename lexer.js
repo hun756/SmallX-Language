@@ -24,7 +24,7 @@ module.exports = lexer;
 // lexer.reset(`=> =`);
 
 async function main() {
-    const code = (await fs.readFile("langfiles/ex1.smlx")).toString();
+    const code = (await fs.readFile("langfiles/ex5.smlx")).toString();
     lexer.reset(code);
     while (true) {
         const token = lexer.next();
@@ -34,7 +34,5 @@ async function main() {
         console.log(token);
     }
 }
-
-console.log("deneem");
 
 main().catch(err => console.log(err.stack));
