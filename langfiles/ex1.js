@@ -1,13 +1,4 @@
-
-function print(...args) {
-    console.log(...args);
-}
-
-const add = (x, y) => x + y;
-const multiply = (x, y) => x * y;
-const subtract = (x, y) => x - y;
-const divide = (x, y) => x / y;
-
+"use strict";var _u=Math.imul;function print(){var t;(t=console).log.apply(t,arguments)}var add=function(t,n){return t+n},multiply=function(t,n){return _u(t,n)},subtract=function(t,n){return t-n},divide=function(t,n){return t/n},sqrt=function(t){return Math.sqrt(t)},pow=function(t, n){return Math.pow(t, n)};
 var name = "Mehmet";
 var age = 25;
 var favourite_color = "orange";

@@ -11,14 +11,22 @@ async function main() {
     const astJson = (await fs.readFile(fileName)).toString();
     const runtimeJs = (await fs.readFile("runtime.js")).toString();
     const astStr = JSON.parse(astJson);
-    let jsCode, tempStr = new String(runtimeJs + "\n" + generateJsforStatements(astStr));
-    if (uglify.minify(tempStr).error) {
+    let jsCode, tempStr = new String(runtimeJs + generateJsforStatements(astStr));
+    var t;
+    if (t = uglify.minify(tempStr, {
+        mangle: {
+            toplevel: true,
+        },
+        nameCache: {
+        }
+    }).error) {
+        console.error(t)
         jsCode = tempStr;
     } else {
         jsCode = uglify.minify(tempStr).code;
     }
 
-    const outputFilename = fileName.replace(".ast",".js");
+    const outputFilename = fileName.replace(".ast", ".js");
     await fs.writeFile(outputFilename, String(jsCode));
 
     console.log(`Wrote ${outputFilename} .`)
@@ -53,7 +61,7 @@ function generateJsforStatementOrExpr(node) {
         return js;
 
     } else if (node.type === "fun_call") {
-        
+
         const fname = node.fun_name.value;
         const argsList = node.arguments.map((arg) => {
             return generateJsforStatementOrExpr(arg);
