@@ -1,5 +1,5 @@
 const fs = require('mz/fs');
-
+const uglify = require('uglify-js');
 async function main() {
     const fileName = process.argv[2];
 
@@ -9,11 +9,17 @@ async function main() {
     }
 
     const astJson = (await fs.readFile(fileName)).toString();
+    const runtimeJs = (await fs.readFile("runtime.js")).toString();
     const astStr = JSON.parse(astJson);
-    const jsCode = generateJsforStatements(astStr);
+    let jsCode, tempStr = new String(runtimeJs + "\n" + generateJsforStatements(astStr));
+    if (uglify.minify(tempStr).error) {
+        jsCode = tempStr;
+    } else {
+        jsCode = uglify.minify(tempStr).code;
+    }
 
-    const outputFilename = fileName.replace(".ast", ".js");
-    await fs.writeFile(outputFilename, jsCode);
+    const outputFilename = fileName.replace(".ast",".js");
+    await fs.writeFile(outputFilename, String(jsCode));
 
     console.log(`Wrote ${outputFilename} .`)
 }
@@ -35,7 +41,6 @@ function generateJsforStatementOrExpr(node) {
         let fname;
 
         if (node.value.type === "fun_call") {
-            console.log("burada");
             fname = node.value.fun_name.value;
             const argsList = node.value.arguments.map((arg) => {
                 return generateJsforStatementOrExpr(arg);
@@ -48,7 +53,7 @@ function generateJsforStatementOrExpr(node) {
         return js;
 
     } else if (node.type === "fun_call") {
-
+        
         const fname = node.fun_name.value;
         const argsList = node.arguments.map((arg) => {
             return generateJsforStatementOrExpr(arg);
@@ -59,6 +64,8 @@ function generateJsforStatementOrExpr(node) {
     } else if (node.type === "string") {
         return node.value;
     } else if (node.type === "number") {
+        return node.value;
+    } else if (node.type === "identifier") {
         return node.value;
     } else {
         throw new Error(`Unhandled AST node type ${node.type}`);

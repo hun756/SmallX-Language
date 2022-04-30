@@ -21,6 +21,7 @@
   "dependencies": {
     "moo": "^0.5.1",
     "mz": "^2.7.0",
-    "nearley": "^2.20.1"
+    "nearley": "^2.20.1",
+    "uglify-js": "^3.15.4"
   }
 }
